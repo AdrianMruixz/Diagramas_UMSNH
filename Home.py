@@ -21,7 +21,7 @@ import streamlit as st
 # Después de todo el contenido, pones:
 
 st.markdown("---")  # línea divisoria opcional
-st.image(r"C:\Users\nan_m\Downloads\App_Diagramas_Streamlit\mi_app_diagramas\FIC.png", width=150)
+st.image("FIC.png", width=150)
 st.markdown("Facultad de Ingeniería Civil UMSNH")
 
 
