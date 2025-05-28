@@ -361,13 +361,14 @@ def predecir_c(M,P,c):
         ecuacion += f" {signo} {abs(coef):.6f}·{nombre}"
         return c_predicho
 def ajustar_modeloP(P, M):
+    from sklearn.metrics import r2_score
     mejor_r2 = -1
     mejor_modelo = None
     mejor_coef = None
     for i in range(1, 10):
-        coef = np.polyfit(P, M, i)
+        coef = np.polyfit(M, P, i)  # <-- Intercambiado el orden: P = f(M)
         p = np.poly1d(coef)
-        P_predicho = p(M)
+        P_predicho = p(M)  # <-- Bien evaluado
         r2 = r2_score(P, P_predicho)
         if r2 > mejor_r2:
             mejor_r2 = r2
