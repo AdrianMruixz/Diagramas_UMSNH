@@ -21,6 +21,13 @@ if "M" in st.session_state and "P" in st.session_state and "c" in st.session_sta
     modeloM, r2_M, coefM = ajustar_modeloM(P, M)
     modeloP, r2_P, coefP = ajustar_modeloP(P, M)
     momento_flexion_pura = modeloM(0)
+    modelo_c, transformador_c, r2_c, grado_c = predecir_c(M, P, c)
+    
+    # Preparar input para predecir c en flexión pura (P=0, M=momento_flexion_pura)
+    X_nuevo = transformador_c.transform([[0, momento_flexion_pura]])
+    c_flexion_pura = modelo_c.predict(X_nuevo)[0]
+
+    st.write(f"✅ c en flexión pura (P=0, M={momento_flexion_pura:.2f}): {c_flexion_pura:.2f} cm")
 
 
     # Crear figura con diagrama base y puntos manuales
@@ -87,7 +94,7 @@ if "M" in st.session_state and "P" in st.session_state and "c" in st.session_sta
             0,
             Tabla[1, np.argmin(np.abs(c - 0.6 * h))]
         ],
-        "Profundidad c (cm)": [h, 0, "N/A", 0.6 * d]
+        "Profundidad c (cm)": [h, 0, c_flexion_pura, 0.6 * d]
     }
     df_puntos = pd.DataFrame(puntos)
     st.dataframe(df_puntos)

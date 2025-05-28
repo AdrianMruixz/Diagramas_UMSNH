@@ -326,8 +326,8 @@ def diagrama_interaccion_cualquiera(As, verts, h, r, fy, fpc):
         
         return M,P,c,F_total,d,h
 def predecir_c(M,P,c):
-    X = np.column_stack((P, M))  # Matriz con dos variables independientes
-
+    
+    X = np.column_stack((P, M))
     mejor_r2 = -1
     mejor_grado = None
     mejor_modelo = None
@@ -348,18 +348,10 @@ def predecir_c(M,P,c):
             mejor_modelo = modelo
             mejor_transformador = poly
 
-    # Mostrar la mejor ecuación (en forma simbólica aproximada)
-    nombre_vars = mejor_transformador.get_feature_names_out(['P', 'M'])
-    coeficientes = mejor_modelo.coef_
-    intercepto = mejor_modelo.intercept_
+    return mejor_modelo, mejor_transformador, mejor_r2, mejor_grado
 
-    ecuacion = f"c(P, M) ≈ {intercepto:.6f}"
-    for nombre, coef in zip(nombre_vars, coeficientes):
-        if abs(coef) < 1e-6:
-            continue  # filtro de umbral
-        signo = "+" if coef >= 0 else "-"
-        ecuacion += f" {signo} {abs(coef):.6f}·{nombre}"
-        return c_predicho
+
+
 def ajustar_modeloP(M, P):
     if len(M) < 3:
         return None, 0, None
