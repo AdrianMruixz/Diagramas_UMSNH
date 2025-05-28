@@ -360,17 +360,26 @@ def predecir_c(M,P,c):
         signo = "+" if coef >= 0 else "-"
         ecuacion += f" {signo} {abs(coef):.6f}·{nombre}"
         return c_predicho
-def ajustar_modeloP(P, M):
+def ajustar_modeloP(M, P):
+    if len(M) < 3:
+        return None, 0, None
+
     mejor_r2 = -1
     mejor_modelo = None
     mejor_coef = None
-    for i in range(1, 10):
-        coef = np.polyfit(P, M, i)
-        p = np.poly1d(coef)
-        P_predicho = p(M)
-        r2 = r2_score(P, P_predicho)
-        if r2 > mejor_r2:
-            mejor_r2 = r2
-            mejor_modelo = p
-            mejor_coef = coef
+    max_grado = min(5, len(M) - 1)  # evita overfitting
+
+    for i in range(1, max_grado + 1):
+        try:
+            coef = np.polyfit(M, P, i)
+            p = np.poly1d(coef)
+            P_predicho = p(M)
+            r2 = r2_score(P, P_predicho)
+            if r2 > mejor_r2:
+                mejor_r2 = r2
+                mejor_modelo = p
+                mejor_coef = coef
+        except:
+            continue
     return mejor_modelo, mejor_r2, mejor_coef
+
