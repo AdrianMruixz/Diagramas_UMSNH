@@ -24,7 +24,7 @@ st.pyplot(fig)
 
 
 if st.button("📈 Generar Diagrama"):
-    M, P, c, F_total, d = diagrama_interaccion(As, b, h, r, fy, fpc)
+    M, P, c, F_total, d,h = diagrama_interaccion(As, b, h, r, fy, fpc)
 
 
     st.session_state["M"] = M
